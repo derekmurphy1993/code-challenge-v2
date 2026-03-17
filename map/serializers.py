@@ -1,34 +1,33 @@
 from rest_framework import serializers
+from django.db.models import IntegerField
+from django.db.models.functions import Cast
 
 from map.models import CommunityArea, RestaurantPermit
 
-
+# Maybe more efficient way to annotate permits with single db query in other files, currently O(n)
+# Could consider migrating schema to avoid repeated casting
 class CommunityAreaSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityArea
+        # area_id would make frontend joins easier, but I am not sure the live sources provide it reliably.
         fields = ["name", "num_permits"]
 
     num_permits = serializers.SerializerMethodField()
 
     def get_num_permits(self, obj):
-        """
-        TODO: supplement each community area object with the number
-        of permits issued in the given year.
+        year = self.context.get("year")
+        if not year or obj.area_id is None:
+            return 0
+        try:
+            year = int(year)
+        except (TypeError, ValueError):
+            return 0
 
-        e.g. The endpoint /map-data/?year=2017 should return something like:
-        [
-            {
-                "ROGERS PARK": {
-                    area_id: 17,
-                    num_permits: 2
-                },
-                "BEVERLY": {
-                    area_id: 72,
-                    num_permits: 2
-                },
-                ...
-            }
-        ]
-        """
-
-        pass
+        return RestaurantPermit.objects.filter(
+            community_area_id__regex=r"^\d+$",
+            issue_date__year=year,
+        ).annotate(
+            community_area_id_int=Cast("community_area_id", IntegerField())
+        ).filter(
+            community_area_id_int=obj.area_id
+        ).count()
