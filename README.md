@@ -1,18 +1,26 @@
-# DataMade Code Challenge: React Map
+# Derek Murphys DataMade Code Challenge: React Map
 
 ![2026 DataMade Code Challenge](https://github.com/datamade/code-challenge-v2/blob/main/map/static/images/2026-datamade-code-challenge.jpg)
 
-Welcome to the 2026 DataMade code challenge! 👋
+## Intro for DataMade
 
-## Overview
+Hello, and thank you for taking the time to review this code, as well as the interesting questions you've asked.
 
-Your task is to complete the following programming exercise to show us some of your code! This exercise is based on work that DataMade does every day: pulling data from the web, debugging tricky code, and presenting information to the world.
+With the scope of this project defined as roughly 2 hours, I decided to keep my solutions fairly limited as I would when working with a freelance client. In particular I avoided changing files not mentioned in the initial "completing the challenge" steps, and solutions that seemed outside of 'budget' or would require additional context. You will see a few comments within the code where I note where the project could be expanded, and also a few comments describing why I made certain choices.
 
-Submissions should be submitted as a pull request against your fork of this original repository. **Make sure to make your pull request against your own fork of the repository, not the original DataMade repository**.
+My professional work has mainly focused on frontend development using React. I have been considering returning to higher education for data science / analytics and learned the basics of python, but I am relatively inexperienced with it. With this in mind I used Codex ai client to assist me with solutions for the serializer and testing, as well as a final pass to check for potential errors and other blind spots.
 
-There’s no time limit, but don’t feel the need to go over the top with your submission. We expect this task to take about two hours to complete, but it could take more or less time depending on your familiarity with Django and React. When you’re all set, share your code with us as a repository on GitHub.
+Thank you again for your time and consideration, I look forward to your feedback and any future conversations.
 
-We’ll be evaluating whether the code works, as well as its quality. Before submitting, make sure that your code does what you expect it to do, that it’s clean and neat enough to meet your standards, and that you’ve provided us some instructions on how to run it.
+-Derek
+
+## Project Overview
+
+This exercise is based on work that DataMade does every day: pulling data from the web, debugging tricky code, and presenting information to the world.
+
+This exercise visualizes restaurant permit activity across Chicago community areas using Django and React. The frontend renders a Leaflet map using community area GeoJSON boundaries. Users can interact with the app by choosing a year, seeing overview stats (total permits issued, most permits issued for a singular area), map shading displaying where higher percentages of permits were issued, and further interaction for information of individual community areas.
+
+The app will run in Docker, with migrations handled at startup and data loaded separately to populate community areas and permit records.
 
 ## Installation
 
@@ -36,50 +44,18 @@ And finally, run the app:
 docker compose up
 ```
 
-The app will log to the console, and you should be able to visit it at http://localhost:8000
-
-## Completing the Challenge
-
-Once you have the app up and running on your computer, you'll need to flesh out certain code blocks to make the map functional. You'll be using [Django](https://docs.djangoproject.com/en/6.0/) and [React-Leaflet](https://react-leaflet.js.org/docs/api-components/) to complete this task. By the end of this challenge, you should have:
-
-- a map that displays Chicago's community areas, shaded depending on how many new restaurant permits were issued in a given year
-- community area shapes that show some light details on that community area when a user interacts with them
-- a filter that allows users to request permits that were issued in a given year
-- UI components that display the total number of permits and max number of permits in one community area for that year
-
-This way you go about completing these goals is meant to be open-ended, so tackle the following steps in whatever way you're most comfortable!
-
-### Step 1: Supplement the community area geojson data
-
-In `map/serializers.py`, supplement each community area with data on the amount of permits issued in each area during the currently filtered year. From here, the view will pass that data to the front end.
-
-### Step 2: Write a test for your data endpoint
-
-In `tests/test_views.py` implement a test to validate the data that your endpoint produces. You will want to create some test `CommunityArea` and `RestaurantPermit` objects and then assert that the expected values are returned when querying the endpoint.
-
-Use this command to run tests:
+To run intergration tests:
 
 ```bash
  docker compose -f docker-compose.yml -f tests/docker-compose.yml run --rm app
 ```
 
-### Step 3: Filter results by a specific year
+The app will log to the console, and you should be able to visit it at http://localhost:8000
 
-In `map/static/js/RestaurantPermitMap.js`, create a filter that allows users to send a request for a specific year to the backend. The options shoulds be any year between 2016 and 2026, inclusive. Then, use the fetch api in the map component to make a request and receive that data.
+### Credit
 
-### Step 4: Display results on the page
-
-In the map component, process the community area and use it to display shapes for all areas on the map. Then, display the total number of restaurant permits that year as well as the maximum number of permits in any one area.
-
-### Step 5: Make the map dynamic
-
-Start displaying some data! Use the `setAreaInteraction()` method to shade the map according to how many permits it has in a year, making sure that it updates automatically when a new year is selected. In this same method, have each area display a popup during some kind of user interaction. The popup should have some light details to help the user understand what they're looking at.
-
-### Step 6: Submit your work
-
-To submit your work, create a feature branch for your code, commit your changes, push your commits up to your fork, and open up a pull request against main. Finally, drop a link to your pull request in your application.
-
-_Note: If you would prefer to keep your code challenge private, please share access with the following members of DataMade on GitHub:_
+Source of the code challenge:
+https://github.com/datamade/code-challenge-v2
 
 | Member    | GitHub Account                   |
 | --------- | -------------------------------- |
@@ -88,5 +64,3 @@ _Note: If you would prefer to keep your code challenge private, please share acc
 | Monkruman | https://github.com/antidipyramid |
 | Xavier    | https://github.com/xmedr         |
 | Hayley    | https://github.com/haowens       |
-
-Keep in mind that you cannot create a private fork of a public repository on GitHub, so you’ll need to [follow these instructions](https://gist.github.com/0xjac/85097472043b697ab57ba1b1c7530274) to create a private copy of the repo.
